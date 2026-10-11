@@ -6,8 +6,6 @@ The API key is read from the environment or the local .env file (see answer.py).
 """
 import json
 import re
-import threading
-import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -17,7 +15,7 @@ from verify import corpus_for, find_quotes, match_quote_ex
 
 HERE = Path(__file__).parent
 PDF_PATH = HERE / "resources" / "MP_Bhumi_Vikas_Rules_2012_upto_2025-03-06_EN.pdf"
-PORT = 8000
+PORT = int(__import__("os").environ.get("PORT", "8000"))
 
 ENGINE = RuleSearch(load_rules())
 BY_NUM = {r["number"]: r for r in ENGINE.rules}
@@ -110,7 +108,6 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    url = f"http://localhost:{PORT}"
-    print(f"Bhumi Vikas Sahayak running at {url}  (Ctrl+C to stop)")
-    threading.Timer(1.0, lambda: webbrowser.open(url)).start()
-    ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
+    host = "0.0.0.0"
+    print(f"Bhumi Vikas Sahayak listening on {host}:{PORT}", flush=True)
+    ThreadingHTTPServer((host, PORT), Handler).serve_forever()
