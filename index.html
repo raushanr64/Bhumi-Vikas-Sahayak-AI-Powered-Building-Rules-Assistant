@@ -76,6 +76,77 @@ label{font-size:12px;font-weight:700;color:#273f64;display:block;margin-bottom:7
 <footer class="footer">Bhumi Vikas Sahayak · MP Bhumi Vikas Rules 2012 · Data consolidated up to 6 March 2025. Verify later amendments before relying on a result.</footer>
 </div>
 <script>
+/* Streamlit bridge. When this page runs inside the Streamlit app (an iframe), calls to /api/ask are sent to
+   Python through Streamlit's component messages instead of a web server. When the page is opened directly
+   (python server.py) this block does nothing. */
+(function () {
+  if (window.parent === window) return;
+  var PDF_URL = "https://mptownplan.gov.in/NewsPDF/bvn06032025E.pdf";
+  var pending = {}, shown = {}, lastH = 0;
+  var origFetch = window.fetch ? window.fetch.bind(window) : null;
+  function send(type, extra) {
+    var m = { isStreamlitMessage: true, type: type };
+    for (var k in extra) m[k] = extra[k];
+    window.parent.postMessage(m, "*");
+  }
+  function fake(status, obj) {
+    return { ok: status >= 200 && status < 300, status: status, json: function () { return Promise.resolve(obj); } };
+  }
+  function setHeight() {
+    var h = Math.ceil(document.body.getBoundingClientRect().height) + 40;
+    if (h !== lastH) { lastH = h; send("streamlit:setFrameHeight", { height: h }); }
+  }
+  // If Streamlit rebuilt the frame while an answer was on its way, show the finished answer again.
+  function replay(r, req) {
+    try {
+      if (req && req.question) document.getElementById("question").value = req.question;
+      if (req && req.lang && typeof setLanguage === "function") setLanguage(req.lang);
+      document.getElementById("resultPanel").classList.add("show");
+      if (r.status >= 200 && r.status < 300 && r.data && !r.data.error) renderResult(r.data);
+      else document.getElementById("resultContent").innerHTML =
+        '<div class="state error"><strong>Could not get an answer</strong><br>' + String((r.data && r.data.error) || "") + "</div>";
+    } catch (e) {}
+  }
+  window.addEventListener("message", function (ev) {
+    var d = ev.data;
+    if (!d || d.type !== "streamlit:render") return;
+    var a = d.args || {}, r = a.response;
+    if (r && r.id) {
+      if (pending[r.id]) { var done = pending[r.id]; delete pending[r.id]; shown[r.id] = true; done(r); }
+      else if (!shown[r.id]) { shown[r.id] = true; replay(r, a.request); }
+    }
+    setHeight();
+  });
+  window.fetch = function (url, opts) {
+    if (typeof url === "string" && url.indexOf("/api/") === 0) {
+      if (url === "/api/health") return Promise.resolve(fake(200, { live: true }));
+      var body = {};
+      try { body = JSON.parse((opts && opts.body) || "{}"); } catch (e) {}
+      var id = Date.now() + "-" + Math.random().toString(36).slice(2);
+      return new Promise(function (resolve) {
+        pending[id] = function (r) { resolve(fake(r.status || 200, r.data || {})); };
+        send("streamlit:setComponentValue", {
+          value: { id: id, path: url, question: body.question || "", lang: body.lang || "en" },
+          dataType: "json"
+        });
+      });
+    }
+    return origFetch ? origFetch(url, opts) : Promise.reject(new Error("fetch unavailable"));
+  };
+  // "Open rendered PDF page" links: open the official PDF at that page instead.
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="/api/page/"]') : null;
+    if (!a) return;
+    e.preventDefault();
+    window.open(PDF_URL + "#page=" + a.getAttribute("href").split("/").pop(), "_blank", "noopener");
+  });
+  if (window.ResizeObserver) new ResizeObserver(setHeight).observe(document.body);
+  window.addEventListener("load", setHeight);
+  send("streamlit:componentReady", { apiVersion: 1 });
+  setHeight();
+})();
+</script>
+<script>
 const EXAMPLES = [
  {icon:"🏠",en:"My house faces a 10 m wide street and will be 9 m tall. How much open space do I leave at the front?",hi:"मेरा मकान 9 मीटर ऊँचा है और सामने 10 मीटर चौड़ी सड़क है। आगे कितनी जगह छोड़नी होगी?"},
  {icon:"📄",en:"I applied for building permission and the authority has not replied. What happens if they miss the deadline?",hi:"मैंने बिल्डिंग परमिशन के लिए आवेदन किया है, लेकिन प्राधिकरण ने जवाब नहीं दिया। समय-सीमा निकलने पर क्या होगा?"},
