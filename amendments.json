@@ -1,0 +1,67 @@
+[
+  {
+    "id": "2-5-c",
+    "rule": "2(5)(c)",
+    "title": "Plots up to 500 sq m: separate development permission",
+    "date": "28 Aug 2026",
+    "status": "Notified (28 Aug 2026)",
+    "now": "If the construction or reconstruction conforms to the land use in the approved Development Plan, the local authority may permit it on plots up to 500 sq m, subject to the Development Plan norms. Separate development permission under Rule 2(5)(a) is then not required. The exemption depends on that conformity.",
+    "source_name": "TeamLease RegTech, 14 Sep 2026 (summary of the notification)",
+    "source_url": "https://teamleaseregtech.com/updates/article/59469/government-of-madhya-pradesh-amendment-to-land-development-rules",
+    "hints": [
+      "500 sq",
+      "development permission",
+      "development permit",
+      "2(5)",
+      "विकास अनुज्ञा",
+      "विकास की अनुज्ञा",
+      "डेवलपमेंट परमिशन"
+    ],
+    "force_rules": [
+      "12",
+      "2"
+    ],
+    "patterns": [
+      "\\b2\\s*\\(\\s*5\\s*\\)",
+      "\\b500\\s*(sq|square|sqm|m2|m²|वर्ग)"
+    ]
+  },
+  {
+    "id": "5-6",
+    "rule": "5(6) and new Appendix M",
+    "title": "Green buildings: extra FAR incentive",
+    "date": "15 Dec 2025",
+    "status": "Notified (15 Dec 2025), Notification UDH-3/0324/2025/18-5",
+    "now": "Green buildings certified by GRIHA, IGBC or LEED get additional FAR: 3% for Gold / 4-Star, 5% for Platinum / 5-Star. Only one certification incentive can be claimed. ECSBC (commercial) or Eco Niwas Samhita (residential) compliance is mandatory, and the intended certification must be declared at the permission stage. Cool and green roofs are also required.",
+    "source_name": "TeamLease RegTech, 17 Dec 2025 (summary of the notification)",
+    "source_url": "https://teamleaseregtech.com/updates/article/50844/govt-of-madhya-pradesh-issued-amendments-to-the-madhya-pradesh-bhumi-vikas-niyam-2012/",
+    "hints": [
+      "green building",
+      "griha",
+      "igbc",
+      "leed",
+      "additional far",
+      "extra far",
+      "far incentive"
+    ],
+    "force_rules": []
+  },
+  {
+    "id": "37-1-a",
+    "rule": "37(1)(a) (proposed)",
+    "title": "Prohibited land uses and mixed use (DRAFT)",
+    "date": "29 Jun 2026",
+    "status": "DRAFT only, not known to be in force. Check if it was finalised.",
+    "now": "The draft proposes that every use is permitted in every land use zone unless it is on a negative list for that zone, and that mixed use (horizontal or vertical) is allowed in all zones as prescribed.",
+    "source_name": "TeamLease RegTech, 17 Jul 2026 (summary of the draft, Notification TNCP/1/6/0006/2025)",
+    "source_url": "https://teamleaseregtech.com/updates/article/57899/draft-amendment-to-madhya-pradesh-bhumi-vikas-niyam-2012/",
+    "hints": [
+      "prohibited use",
+      "negative list",
+      "mixed use",
+      "permissible use",
+      "land use zone"
+    ],
+    "force_rules": []
+  }
+]

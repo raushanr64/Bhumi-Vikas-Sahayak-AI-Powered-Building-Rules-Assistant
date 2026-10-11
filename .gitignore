@@ -1,0 +1,10 @@
+# secrets: never commit
+.env
+key.txt
+*.key
+
+__pycache__/
+*.pyc
+.venv/
+v/
+regression_results.md
